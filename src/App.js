@@ -38,17 +38,25 @@ function App() {
   fetchData()
 },[])
 
-
-
-
-const addToCard = (obj)=>{
+const addToCard =  async (obj) => {
   try{
-    if(cartItems.find(item => Number(item.id) == Number(obj.id))){
-      axios.delete(`https://645a75ab95624ceb21029a48.mockapi.io/produc/${obj.id}`)
-      setCartItems(prev => prev.filter(item => Number(item.id) !== Number(obj.id)))
+    const findItem = cartItems.find(item => Number(item.parentId ) == Number(obj.id))
+    if(findItem){
+      axios.delete(`https://645a75ab95624ceb21029a48.mockapi.io/produc/${findItem.id}`)
+      setCartItems(prev => prev.filter(item => Number(item.parentId ) !== Number(obj.id)))
     }else{
-    axios.post("https://645a75ab95624ceb21029a48.mockapi.io/produc", obj)
       setCartItems(prev =>[...prev, obj])
+      const {data} = await axios.post("https://645a75ab95624ceb21029a48.mockapi.io/produc", obj)
+      setCartItems(prev => prev.map(item =>{
+        if(item.parentId == data.parentId){
+          return {
+            ...item, id: data.id
+          }
+        }else{
+          return item
+        }
+      }))
+      
     }
   }catch( eror){  
     alert('eror')
@@ -56,7 +64,7 @@ const addToCard = (obj)=>{
   }
 }
 const onRemoveCard =(id)=>{
-  setCartItems((prev) => prev.filter(items => items.id !== id))
+  setCartItems((prev) => prev.filter(items => Number(items.id)!== Number(id)))
   axios.delete(`https://645a75ab95624ceb21029a48.mockapi.io/produc/${id}`)
 }
 
@@ -75,8 +83,9 @@ const onFavarit = async (obj)=>{
 }
 
 
-const isItemAdd =(id)=>{
-  return  cartItems.some((obj) =>  Number(obj.id) == Number(id))
+const isItemAdd =(id)=>{ 
+  return  cartItems.some((obj) =>  Number(obj.parentId) == Number(id))
+
 }
   return (
     <AppContext.Provider value={{ items, cartItems, favorit, addToCard,  onFavarit, isItemAdd, setDrawerOpen, setCartItems }}>
@@ -97,3 +106,10 @@ const isItemAdd =(id)=>{
 }
 
 export default App;
+
+
+
+
+
+
+

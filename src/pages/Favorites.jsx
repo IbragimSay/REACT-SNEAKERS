@@ -9,10 +9,7 @@ import s from '../componets/Cards/card.module.scss'
 const Favorite = ({ onFavarit, addToCard })=>{
   const {favorit} = useContext(AppContext)
  
- 
     return(
-
-
       <div className='content'>
         <div className='block_title_input'>
           <h1>Мои закладки</h1>

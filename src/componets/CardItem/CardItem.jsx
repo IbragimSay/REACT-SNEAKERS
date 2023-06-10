@@ -3,21 +3,18 @@ import s from './cardItem.module.scss'
 import ContentLoader from "react-content-loader"
 import AppContext from '../../context';
 
-
-
-
 const CardItem = ({ onFavarit, id, pric,  image, text, card, onClickPlus, loding = false , favorited = false, added=false }) => {
   const [fovarit, setFovarit] = useState(favorited)
   const {isItemAdd} = useContext(AppContext)
-
+  const Obj = {id, parentId : id, text, image, pric} 
 
   const  onClickFavorit =(e)=>{
     setFovarit(!fovarit)
-    onFavarit({id, text, image, pric})
+    onFavarit(Obj)
   }
 
   const onClickAdded =(e)=>{ 
-    onClickPlus({id, text, image, pric})
+    onClickPlus(Obj)
   }
   return (
     <div>
@@ -49,7 +46,7 @@ const CardItem = ({ onFavarit, id, pric,  image, text, card, onClickPlus, loding
                    
                    <img className={s.but_addCart} onClick={onClickAdded} width={32} height={32} src={isItemAdd(id) ? "/photo/grin_but_add.svg" : "/photo/add_cart.svg"}/>
                    
-                   
+                    
                  
                 </div>
             </div>

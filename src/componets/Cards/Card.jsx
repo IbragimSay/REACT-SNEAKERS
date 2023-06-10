@@ -31,6 +31,7 @@ const Card = ({items, isLoding, onFavarit, addToCard, inputV, cartItems, setCart
           onClickPlus={e=>{addToCard(e)}}
           card={card} 
           key={index} 
+          {...card}
 
           loding ={isLoding}
           />
